@@ -1,0 +1,50 @@
+//Termo station code by: Net365&SEP
+
+//Conecting libraries:
+#include <OneWire.h>
+#include <DallasTemperature.h>
+#define ONE_WIRE_BUS 6 // номер пина к которому подключен DS18B20
+OneWire oneWire(ONE_WIRE_BUS);
+DallasTemperature sensors(&oneWire);
+
+#include <LiquidCrystal.h>
+
+
+
+
+float tempC = 0;
+float tempF = 0;
+
+LiquidCrystal lcd(12,11,5,4,3,2);//Conecting LCD display
+
+void setup() {
+  sensors.begin();
+  lcd.begin(16,2);
+  lcd.clear();
+  pinMode(3, OUTPUT);
+  analogWrite(3, 0);
+  lcd.setCursor(4,0);
+  lcd.print("NET 365");
+  lcd.setCursor(2,2);
+  lcd.print("TECHNOLOGIES");
+  delay(1000);
+  
+  
+}
+
+void loop() {
+  sensors.requestTemperatures();
+  tempC = sensors.getTempCByIndex(0);
+  tempF = sensors.toFahrenheit(tempC);
+
+  delay(100);
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("C: ");
+  lcd.print(tempC);
+  lcd.print(" degrees");
+  lcd.setCursor(0,1);
+  lcd.print("F: ");
+  lcd.print(tempF);
+  lcd.print(" degrees");
+}
